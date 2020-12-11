@@ -31,7 +31,6 @@ class _ScrollingAlertDialog extends ObservingStatefulWidget<ScrollingAlertDialog
   ScrollingAlertCubit _scrollingAlertCubit = ScrollingAlertCubit();
   @override
   void initState() {
-    Log.setTrace(baseLevel: LogLevel.All);
     super.initState();
   }
 
@@ -42,10 +41,6 @@ class _ScrollingAlertDialog extends ObservingStatefulWidget<ScrollingAlertDialog
 
   @override
   Widget build(BuildContext context) {
-    return _body();
-  }
-
-  Widget _body() {
     return BlocBuilder<ScrollingAlertCubit, ScrollingAlertState>(
       cubit: _scrollingAlertCubit,
       builder: (context, state) {
@@ -62,11 +57,12 @@ class _ScrollingAlertDialog extends ObservingStatefulWidget<ScrollingAlertDialog
             _enableWhenScrolledToButtonOfBodyWidget = (state as SetButtonEnabled).state;
             break;
         }
-        List<Widget> buttons = [widget.dismissButton.makeButton(context, _enableWhenScrolledToButtonOfBodyWidget)];
+        List<Widget> buttons = List();
         if ((widget.buttons ?? List()).isNotEmpty) {
           widget.buttons
               .forEach((sab) => buttons.add(sab.makeButton(context, _enableWhenScrolledToButtonOfBodyWidget)));
         }
+        buttons.add(widget.dismissButton.makeButton(context, _enableWhenScrolledToButtonOfBodyWidget));
         return LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
             return CupertinoAlertDialog(
