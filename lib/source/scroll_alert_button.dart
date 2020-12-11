@@ -1,56 +1,39 @@
 import 'package:flutter/material.dart';
 
 abstract class ScrollAlertButtonWidget {
-  Function onTap(String tag, dynamic response);
-  dynamic response;
+  Function onTap();
   Widget body;
-  String tag;
-  Widget makeButton(BuildContext context, bool makeActive) {
-    return FlatButton(
-        child: this.body,
-        onPressed: !makeActive
-            ? null
-            : () {
-                onTap(tag, response);
-                Navigator.of(context, rootNavigator: true).pop();
-              });
-  }
+  Widget makeButton(BuildContext context, bool makeActive);
 }
+
+/// The [ScrollingAlertDialog] requires this [special use Button] for the [response actions] that sit
+/// at the bottom of the [Alert Dialog]. This button wraps the [button body](typically a [Text] widget), and a
+/// [user callback] around a [Navigator pop()] command to dismiss the dialog.
 
 class ScrollAlertButton implements ScrollAlertButtonWidget {
   ScrollAlertButton({
-    @required this.tag,
     @required this.body,
-    @required this.onTapFunction,
-    @required this.response,
-  })  : assert(tag != null),
-        assert(body != null),
-        assert(onTapFunction != null);
+    @required this.onTapCallback,
+  })  : assert(body != null),
+        assert(onTapCallback != null);
 
   @override
-  Function onTap(String tag, response) => onTapFunction(tag, response);
+  Function onTap() => onTapCallback();
 
-  final Function(String, dynamic) onTapFunction;
+  final Function() onTapCallback;
 
   @override
   Widget body;
 
   @override
-  var response;
-
-  @override
-  String tag;
-
-  @override
   Widget makeButton(BuildContext context, bool makeActive) {
     return FlatButton(
-      child: body,
-      onPressed: !makeActive
-          ? null
-          : () {
-              Navigator.of(context, rootNavigator: true).pop();
-              onTap(tag, response);
-            },
-    );
+        child: body,
+        onPressed: !makeActive
+            ? null
+            : () {
+                Navigator.of(context, rootNavigator: true).pop();
+                onTap();
+              });
   }
 }

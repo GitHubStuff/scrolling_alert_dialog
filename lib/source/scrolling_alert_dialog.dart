@@ -6,6 +6,12 @@ import 'package:theme_package/theme_package.dart';
 
 import 'scroll_alert_button.dart';
 
+/// Custom [Alert Widget] that will display [scrolling context] and [response buttons] that are inactive until
+/// the user [scrolls] to the bottom of the content.
+
+/// Max [height] of the [SingleChildScrollView] as a percentage of the screen height
+const double _sizePercentageOfScrollView = 0.30;
+
 class ScrollingAlertDialog extends StatefulWidget {
   final Widget header;
   final Widget bodyWidget;
@@ -29,13 +35,10 @@ class _ScrollingAlertDialog extends ObservingStatefulWidget<ScrollingAlertDialog
   bool _enableWhenScrolledToButtonOfBodyWidget = false;
   ScrollController _scrollController = ScrollController();
   ScrollingAlertCubit _scrollingAlertCubit = ScrollingAlertCubit();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void afterFirstLayout(BuildContext context) {
+    /// Enable/disable buttons based on the [content] fit in the [SingleChildScrollView]
     _scrollingAlertCubit.setButton(state: _scrollController.position.maxScrollExtent == 0.0);
   }
 
@@ -46,6 +49,8 @@ class _ScrollingAlertDialog extends ObservingStatefulWidget<ScrollingAlertDialog
       builder: (context, state) {
         switch (state.scrollingAlertType) {
           case ScrollingAlertType.ScrollingAlertInitial:
+
+            /// Add a [listener] that will enable the [buttons] after reaching bottom of the [SingleChildScrollView]
             _scrollController.addListener(() {
               final maxScroll = _scrollController.position.maxScrollExtent;
               if (_scrollController.offset >= maxScroll) {
@@ -57,6 +62,8 @@ class _ScrollingAlertDialog extends ObservingStatefulWidget<ScrollingAlertDialog
             _enableWhenScrolledToButtonOfBodyWidget = (state as SetButtonEnabled).state;
             break;
         }
+
+        /// Build the [List] of [Buttons], if any, then add the [required dismissButton]
         List<Widget> buttons = List();
         if ((widget.buttons ?? List()).isNotEmpty) {
           widget.buttons
@@ -66,13 +73,13 @@ class _ScrollingAlertDialog extends ObservingStatefulWidget<ScrollingAlertDialog
         bool isAndroid() => Theme.of(context).platform == TargetPlatform.android;
         return LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
-            return isAndroid()
+            return !isAndroid()
                 ? AlertDialog(
                     actions: buttons,
                     title: widget.header,
                     content: ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxHeight: viewportConstraints.maxHeight * 0.30,
+                        maxHeight: viewportConstraints.maxHeight * _sizePercentageOfScrollView,
                       ),
                       child: SingleChildScrollView(
                         controller: _scrollController,
@@ -85,7 +92,7 @@ class _ScrollingAlertDialog extends ObservingStatefulWidget<ScrollingAlertDialog
                     title: widget.header,
                     content: ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxHeight: viewportConstraints.maxHeight * 0.30,
+                        maxHeight: viewportConstraints.maxHeight * _sizePercentageOfScrollView,
                       ),
                       child: SingleChildScrollView(
                         controller: _scrollController,
