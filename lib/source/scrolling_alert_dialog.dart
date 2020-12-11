@@ -63,21 +63,36 @@ class _ScrollingAlertDialog extends ObservingStatefulWidget<ScrollingAlertDialog
               .forEach((sab) => buttons.add(sab.makeButton(context, _enableWhenScrolledToButtonOfBodyWidget)));
         }
         buttons.add(widget.dismissButton.makeButton(context, _enableWhenScrolledToButtonOfBodyWidget));
+        bool isAndroid() => Theme.of(context).platform == TargetPlatform.android;
         return LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
-            return CupertinoAlertDialog(
-              actions: buttons,
-              title: widget.header,
-              content: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: viewportConstraints.maxHeight * 0.30,
-                ),
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: widget.bodyWidget,
-                ),
-              ),
-            );
+            return isAndroid()
+                ? AlertDialog(
+                    actions: buttons,
+                    title: widget.header,
+                    content: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: viewportConstraints.maxHeight * 0.30,
+                      ),
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: widget.bodyWidget,
+                      ),
+                    ),
+                  )
+                : CupertinoAlertDialog(
+                    actions: buttons,
+                    title: widget.header,
+                    content: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: viewportConstraints.maxHeight * 0.30,
+                      ),
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: widget.bodyWidget,
+                      ),
+                    ),
+                  );
           },
         );
       },
