@@ -1,0 +1,25 @@
+name: example
+description: A Flutter Example project.
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.10.4 <3.0.0"
+  flutter: ">=1.22.4"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.0
+  animations: ^1.1.2
+  scrolling_alert_dialog:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
