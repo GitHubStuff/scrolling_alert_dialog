@@ -1,0 +1,23 @@
+name: scrolling_alert_dialog
+description: A new Flutter package project.
+version: 0.0.1
+author: StevenSmith@ICodeForYou.com
+homepage: http://www.icodeforyou.com
+
+environment:
+  sdk: ">=2.10.4 <3.0.0"
+  flutter: ">=1.22.4"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  equatable: ^1.2.5
+  flutter_bloc: ^6.1.1
+  theme_package:
+    path: ../theme_package
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
