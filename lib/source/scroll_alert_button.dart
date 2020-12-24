@@ -37,7 +37,9 @@ class ScrollAlertButton implements ScrollAlertButtonWidget {
             ? null
             : () {
                 Navigator.of(context, rootNavigator: true).pop();
-                onTap();
+                Future.delayed(Duration(milliseconds: 200), () {
+                  onTap();
+                });
               });
   }
 }

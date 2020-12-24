@@ -41,7 +41,7 @@ class _ScrollingAlertDialog extends ObservingStatefulWidget<ScrollingAlertDialog
   ScrollingAlertCubit _scrollingAlertCubit = ScrollingAlertCubit();
 
   @override
-  void afterFirstLayout(BuildContext context) {
+  void afterFirstLayoutComplete(BuildContext context) {
     /// Enable/disable buttons based on the [content] fit in the [SingleChildScrollView]
     _scrollingAlertCubit.setButton(state: _scrollController.position.maxScrollExtent == 0.0);
   }
@@ -70,8 +70,7 @@ class _ScrollingAlertDialog extends ObservingStatefulWidget<ScrollingAlertDialog
         /// Build the [List] of [Buttons], if any, then add the [required dismissButton]
         List<Widget> buttons = List();
         if ((widget.buttons ?? List()).isNotEmpty) {
-          widget.buttons
-              .forEach((sab) => buttons.add(sab.makeButton(context, _enableWhenScrolledToButtonOfBodyWidget)));
+          widget.buttons.forEach((sab) => buttons.add(sab.makeButton(context, _enableWhenScrolledToButtonOfBodyWidget)));
         }
         buttons.add(widget.dismissButton.makeButton(context, _enableWhenScrolledToButtonOfBodyWidget));
         bool isAndroid() => Theme.of(context).platform == TargetPlatform.android;
